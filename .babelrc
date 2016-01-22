@@ -1,0 +1,12 @@
+{
+  "env": {
+    "development": {
+      "presets": [ "es2015" ],
+      "plugins": [ "transform-runtime" ]
+    },
+    "buildmodule": {
+      "presets": [ "es2015-rollup" ],
+      "plugins": [ "transform-runtime" ]
+    }
+  }
+}
