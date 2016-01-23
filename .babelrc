@@ -2,11 +2,11 @@
   "env": {
     "development": {
       "presets": [ "es2015" ],
-      "plugins": [ "transform-runtime" ]
+      "plugins": [ "transform-runtime", "transform-object-rest-spread" ]
     },
     "buildmodule": {
       "presets": [ "es2015-rollup" ],
-      "plugins": [ "transform-runtime" ]
+      "plugins": [ "transform-runtime", "transform-object-rest-spread" ]
     }
   }
 }

@@ -1,14 +1,14 @@
 /** Visitor factory for babel, converting React.createElement(...) to <jsx ...>...</jsx>
   *
-	* What we want to handle here is this CallExpression:
-	*
+  * What we want to handle here is this CallExpression:
+  *
   *     React.createElement(
-	*       type: StringLiteral|Identifier|MemberExpression,
-	*       [props: ObjectExpression|Expression],
-	*       [...children: StringLiteral|Expression]
+  *       type: StringLiteral|Identifier|MemberExpression,
+  *       [props: ObjectExpression|Expression],
+  *       [...children: StringLiteral|Expression]
   *     )
-	*
-	* Any of those arguments might also be missing (undefined) and/or invalid. */
+  *
+  * Any of those arguments might also be missing (undefined) and/or invalid. */
 export default function({types: t}) {
 	/** Get a JSXIdentifier or JSXMemberExpression from a Node of known type.
 	  * Returns null if a unknown node type, null or undefined is passed. */
