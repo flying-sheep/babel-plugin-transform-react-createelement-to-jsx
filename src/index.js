@@ -10,6 +10,31 @@
   *
   * Any of those arguments might also be missing (undefined) and/or invalid. */
 export default function({types: t}) {
+	/** Get a JSXElement from a CallExpression
+	  * Returns null if this impossible */
+	function getJSXNode(node) {
+		if (!isReactCreateElement(node)) return null
+		
+		//nameNode and propsNode may be undefined, getJSX* need to handle that
+		const [nameNode, propsNode, ...childNodes] = node.arguments
+		
+		const name = getJSXName(nameNode)
+		if (name === null) return null //name is required
+		
+		const props = getJSXProps(propsNode)
+		if (props === null) return null //no props → [], invalid → null
+		
+		const children = getJSXChildren(childNodes)
+		if (children === null) return null //no children → [], invalid → null
+		
+		// self-closing tag if no children
+		const selfClosing = children.length === 0
+		const startTag = t.jSXOpeningElement(name, props, selfClosing)
+		const endTag = selfClosing ? null : t.jSXClosingElement(name)
+		
+		return t.jSXElement(startTag, endTag, children, selfClosing)
+	}
+	
 	/** Get a JSXIdentifier or JSXMemberExpression from a Node of known type.
 	  * Returns null if a unknown node type, null or undefined is passed. */
 	function getJSXName(node) {
@@ -47,6 +72,19 @@ export default function({types: t}) {
 			: t.jSXSpreadAttribute(prop.argument))
 	}
 	
+	function getJSXChild(node) {
+		if (t.isStringLiteral(node)) return t.jSXText(node.value)
+		if (isReactCreateElement(node)) return getJSXNode(node)
+		if (isExpression(node)) return t.jSXExpressionContainer(node)
+		return null
+	}
+	
+	function getJSXChildren(nodes) {
+		const children = nodes.filter(node => !isNullLikeNode(node)).map(getJSXChild)
+		if (children.some(child => child == null)) return null
+		return children
+	}
+	
 	function getJSXIdentifier(node) {
 		//TODO: JSXNamespacedName
 		if (t.isIdentifier(node)) return t.jSXIdentifier(node.name)
@@ -62,11 +100,12 @@ export default function({types: t}) {
 	}
 	
 	/** tests if a node is a CallExpression with callee “React.createElement” */
-	const isReactCreateElement = callee =>
-		t.isMemberExpression(callee) &&
-		t.isIdentifier(callee.object,   { name: 'React'         }) &&
-		t.isIdentifier(callee.property, { name: 'createElement' }) &&
-		!callee.computed
+	const isReactCreateElement = node =>
+		t.isCallExpression(node) &&
+		t.isMemberExpression(node.callee) &&
+		t.isIdentifier(node.callee.object,   { name: 'React'         }) &&
+		t.isIdentifier(node.callee.property, { name: 'createElement' }) &&
+		!node.callee.computed
 	
 	/** Tests if a node is “null” or “undefined” */
 	const isNullLikeNode = node =>
@@ -85,23 +124,9 @@ export default function({types: t}) {
 	return {
 		visitor: {
 			CallExpression(path) {
-				//nameNode and propsNode may be undefined, getJSX* need to handle that
-				const {callee, arguments: [nameNode, propsNode, ...childNodes]} = path.node
-				
-				if (!isReactCreateElement(callee)) return
-				
-				const name = getJSXName(nameNode)
-				if (name === null) return  //name is required
-				
-				const props = getJSXProps(propsNode)
-				if (props === null) return  //no props → empty array, invalid → null
-				
-				// self-closing tag if no children
-				if (childNodes.length === 0 || childNodes.every(isNullLikeNode)) {
-					const startTag = t.jSXOpeningElement(name, props, true)
-					path.replaceWith(t.jSXElement(startTag, null, [], true))
-					return
-				}
+				const node = getJSXNode(path.node)
+				if (node === null) return null
+				path.replaceWith(node)
 			}
 		}
 	}

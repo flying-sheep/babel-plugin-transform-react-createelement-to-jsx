@@ -42,9 +42,10 @@ describe('createElement-to-JSX', () => {
 	
 	it('should ignore “null”/“undefined” props and handle children', () => {
 		expect('React.createElement("h1", null, "Header")'                          ).to.convertTo('<h1>Header</h1>;')
-		expect('React.createElement("h2", null, "Header", "harhar")'                ).to.convertTo('<h2>Header{"harhar"}</h2>;')
-		expect('React.createElement("h3", null, React.createElement("i"))'          ).to.convertTo('<h3><i/></h3>;')
-		expect('React.createElement("h4", null, "a", React.createElement("b"), "c")').to.convertTo('<h4>a<b/>c</h4>;')
+		//this can be created from e.g. '<h2>Header{"harhar"}</h2>', but i think there’s no downside to merging it
+		expect('React.createElement("h2", null, "Header", "harhar")'                ).to.convertTo('<h2>Headerharhar</h2>;')
+		expect('React.createElement("h3", null, React.createElement("i"))'          ).to.convertTo('<h3><i /></h3>;')
+		expect('React.createElement("h4", null, "a", React.createElement("b"), "c")').to.convertTo('<h4>a<b />c</h4>;')
 	})
 	
 	it('should handle props and children', () => {
