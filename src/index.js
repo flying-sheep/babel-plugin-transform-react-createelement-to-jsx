@@ -31,13 +31,20 @@ export default function({types: t}) {
 	function getJSXProps(node) {
 		if (node == null || isNullLikeNode(node)) return []
 		
-		//TODO: handle _extends Expression in a special way
+		if (t.isCallExpression(node) && t.isIdentifier(node.callee, { name: '_extends' })) {
+			const props = node.arguments.map(getJSXProps)
+			//if calling this recursively works, flatten.
+			if (props.every(prop => prop !== null))
+				return [].concat.apply([], props)
+		}
+		
 		if (!t.isObjectExpression(node) && t.isExpression(node))
 			return [t.jSXSpreadAttribute(node)]
 		
 		if (!isPlainObjectExpression(node)) return null
-		return node.properties.map(({key, value}) =>
-			t.jSXAttribute(getJSXIdentifier(key), getJSXAttributeValue(value)))
+		return node.properties.map(prop => t.isObjectProperty(prop)
+			? t.jSXAttribute(getJSXIdentifier(prop.key), getJSXAttributeValue(prop.value))
+			: t.jSXSpreadAttribute(prop.argument))
 	}
 	
 	function getJSXIdentifier(node) {
@@ -54,22 +61,26 @@ export default function({types: t}) {
 		return null
 	}
 	
+	/** tests if a node is a CallExpression with callee “React.createElement” */
 	const isReactCreateElement = callee =>
 		t.isMemberExpression(callee) &&
 		t.isIdentifier(callee.object,   { name: 'React'         }) &&
 		t.isIdentifier(callee.property, { name: 'createElement' }) &&
 		!callee.computed
 	
+	/** Tests if a node is “null” or “undefined” */
 	const isNullLikeNode = node =>
 		t.isNullLiteral(node) ||
 		t.isIdentifier(node, { name: 'undefined' })
 	
+	/** Tests if a node is an object expression with noncomputed, nonmethod attrs */
 	const isPlainObjectExpression = node =>
 		t.isObjectExpression(node) &&
 		node.properties.every(m =>
-			t.isObjectProperty(m, {computed: false}) &&
-			getJSXIdentifier(m.key) !== null &&
-			getJSXAttributeValue(m.value) !== null)
+			t.isSpreadProperty(m) ||
+			(t.isObjectProperty(m, {computed: false}) &&
+				getJSXIdentifier(m.key) !== null &&
+				getJSXAttributeValue(m.value) !== null))
 	
 	return {
 		visitor: {

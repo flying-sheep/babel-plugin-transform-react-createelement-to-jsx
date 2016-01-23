@@ -1,7 +1,9 @@
 import chai, {expect} from 'chai'
 import convertTo from './chai-convert-to'
 
-chai.use(convertTo(undefined, { plugins: ['syntax-jsx'] }))
+chai.use(convertTo(
+	{ plugins: ['../', 'syntax-object-rest-spread'] },
+	{ plugins: ['syntax-jsx', 'syntax-object-rest-spread'] }))
 
 describe('createElement-to-JSX', () => {
 	it('should convert 1-argument calls', () => {
