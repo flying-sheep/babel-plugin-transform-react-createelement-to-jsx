@@ -42,5 +42,6 @@
     "watch": "babel src -d lib -w",
     "prepublish": "npm run build",
     "test": "mocha --require babel-core/register test"
-  }
+  },
+  "engines" : { "node" : ">=0.12" }
 }
