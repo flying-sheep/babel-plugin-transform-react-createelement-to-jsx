@@ -56,5 +56,8 @@ describe('createElement-to-JSX', () => {
 	it('should ignore intermingled “null”/“undefined” children', () => {
 		expect('React.createElement("h1", null, null, "Header", undefined)').to.convertTo('<h1>Header</h1>;')
 	})
-
+	
+	it('should handle children in nested expressions', () => {
+		expect('React.createElement("h1", null, foo ? React.createElement("p") : null)').to.convertTo('<h1>{foo ? <p /> : null}</h1>;')
+	})
 })

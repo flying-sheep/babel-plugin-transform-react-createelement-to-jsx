@@ -75,7 +75,7 @@ export default function({types: t}) {
 	function getJSXChild(node) {
 		if (t.isStringLiteral(node)) return t.jSXText(node.value)
 		if (isReactCreateElement(node)) return getJSXNode(node)
-		if (isExpression(node)) return t.jSXExpressionContainer(node)
+		if (t.isExpression(node)) return t.jSXExpressionContainer(node)
 		return null
 	}
 	
