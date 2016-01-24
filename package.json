@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-react-createelement-to-jsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transforms React.createElement calls to JSX syntax",
   "author": "Philipp A.",
   "license": "GPL-3.0",
