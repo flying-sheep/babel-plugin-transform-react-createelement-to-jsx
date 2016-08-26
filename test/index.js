@@ -2,7 +2,7 @@ import chai, {expect} from 'chai'
 import convertTo from './chai-convert-to'
 
 chai.use(convertTo(
-	{ plugins: ['../', 'syntax-object-rest-spread'] },
+	{ plugins: [require.resolve('../'), 'syntax-object-rest-spread'] },
 	{ plugins: ['syntax-jsx', 'syntax-object-rest-spread'] }))
 
 describe('createElement-to-JSX', () => {
