@@ -116,7 +116,7 @@ export default function({types: t}) {
 	const isPlainObjectExpression = node =>
 		t.isObjectExpression(node) &&
 		node.properties.every(m =>
-			t.isSpreadProperty(m) ||
+			t.isSpreadElement(m) ||
 			(t.isObjectProperty(m, {computed: false}) &&
 				getJSXIdentifier(m.key) !== null &&
 				getJSXAttributeValue(m.value) !== null))
