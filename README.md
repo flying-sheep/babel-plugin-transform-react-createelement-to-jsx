@@ -44,7 +44,7 @@ $ babel --plugins transform-react-createelement-to-jsx script.js
 ### Via Node API
 
 ```js
-import babel from 'babel-core'
+import babel from '@babel/core'
 
 babel.transform('code', {
   plugins: ['transform-react-createelement-to-jsx'],
