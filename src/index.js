@@ -51,7 +51,7 @@ export default function({types: t}) {
 	}
 	
 	/** Get a array of JSX(Spread)Attribute from a props ObjectExpression.
-	  * Handles the _extends Expression babel creates from SpreadProperty nodes.
+	  * Handles the _extends Expression babel creates from SpreadElement nodes.
 		* Returns null if a validation error occurs. */
 	function getJSXProps(node) {
 		if (node == null || isNullLikeNode(node)) return []
@@ -116,7 +116,7 @@ export default function({types: t}) {
 	const isPlainObjectExpression = node =>
 		t.isObjectExpression(node) &&
 		node.properties.every(m =>
-			t.isSpreadProperty(m) ||
+			t.isSpreadElement(m) ||
 			(t.isObjectProperty(m, {computed: false}) &&
 				getJSXIdentifier(m.key) !== null &&
 				getJSXAttributeValue(m.value) !== null))

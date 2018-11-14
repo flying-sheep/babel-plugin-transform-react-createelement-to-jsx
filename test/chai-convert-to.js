@@ -1,4 +1,4 @@
-import {transform} from 'babel-core'
+import {transform} from '@babel/core'
 
 //function cleanAST(ast) {
 //	Object.keys(ast).forEach((key) => {

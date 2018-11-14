@@ -1,12 +1,10 @@
 {
   "env": {
     "development": {
-      "presets": [ "es2015" ],
-      "plugins": [ "transform-runtime", "transform-object-rest-spread" ]
+      "presets": [ [ "@babel/preset-env", { "modules": "commonjs" } ] ]
     },
     "buildmodule": {
-      "presets": [ "es2015-rollup" ],
-      "plugins": [ "transform-runtime", "transform-object-rest-spread" ]
+      "presets": [ [ "@babel/preset-env", { "modules": false, "useBuiltIns": "usage" } ] ]
     }
   }
 }
