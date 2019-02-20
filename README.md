@@ -38,7 +38,7 @@ $ npm install babel-plugin-transform-react-createelement-to-jsx
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-react-createelement-to-jsx script.js
+$ babel --no-babelrc --plugins transform-react-createelement-to-jsx script.js
 ```
 
 ### Via Node API
