@@ -1,7 +1,7 @@
 # babel-plugin-transform-react-createelement-to-jsx [![build status]][travis] [![npm version]][npm]
 
-[build status]: https://travis-ci.org/flying-sheep/babel-plugin-transform-react-createelement-to-jsx.svg?branch=master
-[travis]: https://travis-ci.org/flying-sheep/babel-plugin-transform-react-createelement-to-jsx
+[build status]: https://travis-ci.com/flying-sheep/babel-plugin-transform-react-createelement-to-jsx.svg?branch=master
+[travis]: https://travis-ci.com/flying-sheep/babel-plugin-transform-react-createelement-to-jsx
 [npm version]: https://img.shields.io/npm/v/babel-plugin-transform-react-createelement-to-jsx.svg
 [npm]: https://www.npmjs.com/package/babel-plugin-transform-react-createelement-to-jsx
 
